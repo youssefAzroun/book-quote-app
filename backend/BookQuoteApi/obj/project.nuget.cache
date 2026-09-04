@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "+AIL1SBNM1c=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\youss\\Desktop\\PracticeProjects\\backend\\BookQuoteApi\\BookQuoteApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\youss\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.19\\microsoft.aspnetcore.openapi.9.0.19.nupkg.sha512",
+    "C:\\Users\\youss\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
