@@ -4,3 +4,23 @@ GET {{BookQuoteApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{BookQuoteApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "Password1"
+}
+
+###
+
+POST {{BookQuoteApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "Password1"
+}
+
+###
