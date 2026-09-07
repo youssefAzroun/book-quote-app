@@ -1,1 +1,3 @@
-{}
+{
+  "dotnet.defaultSolution": "backend/BookQuoteApi/BookQuoteApi.sln"
+}
