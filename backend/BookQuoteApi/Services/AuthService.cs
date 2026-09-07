@@ -15,6 +15,20 @@ public class AuthService(
     {
         var username = request.Username.Trim();
 
+        if (username.Length is < 3 or > 100)
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                new { message = "Username must be between 3 and 100 characters." });
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length is < 8 or > 100)
+        {
+            return (
+                StatusCodes.Status400BadRequest,
+                new { message = "Password must be between 8 and 100 characters." });
+        }
+
         var usernameTaken = await dbContext.Users.AnyAsync(user => user.Username == username);
         if (usernameTaken)
         {
@@ -30,7 +44,15 @@ public class AuthService(
         user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
 
         dbContext.Users.Add(user);
-        await dbContext.SaveChangesAsync();
+
+        try
+        {
+            await dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return (StatusCodes.Status409Conflict, new { message = "Username is already taken." });
+        }
 
         return (StatusCodes.Status201Created, CreateAuthResponse(user));
     }
@@ -38,6 +60,11 @@ public class AuthService(
     public async Task<(int StatusCode, object Body)> LoginAsync(LoginRequest request)
     {
         var username = request.Username.Trim();
+
+        if (username.Length == 0 || string.IsNullOrWhiteSpace(request.Password))
+        {
+            return Unauthorized();
+        }
 
         var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
         if (user is null)

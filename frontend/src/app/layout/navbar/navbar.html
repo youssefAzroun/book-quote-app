@@ -1,0 +1,120 @@
+<nav class="navbar navbar-expand-md bg-body border-bottom sticky-top shadow-sm">
+  <div class="container">
+    <a
+      class="navbar-brand fw-semibold text-truncate me-2"
+      [routerLink]="isLoggedIn() ? '/books' : '/login'"
+      (click)="onNavLinkClick()"
+    >
+      <i class="fa-solid fa-book-open me-2 text-primary" aria-hidden="true"></i>
+      Book Quote
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      @if (isLoggedIn()) {
+        <ul class="navbar-nav me-auto mb-2 mb-md-0 gap-md-1 pt-2 pt-md-0">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/books"
+              routerLinkActive="active fw-semibold"
+              (click)="onNavLinkClick()"
+            >
+              <i class="fa-solid fa-book me-2" aria-hidden="true"></i>
+              Books
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/quotes"
+              routerLinkActive="active fw-semibold"
+              (click)="onNavLinkClick()"
+            >
+              <i class="fa-solid fa-comments me-2" aria-hidden="true"></i>
+              Mina citat
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-grid gap-2 d-md-flex align-items-md-center ms-md-auto pb-2 pb-md-0">
+          @if (currentUser(); as user) {
+            <span class="navbar-text small text-body-secondary px-0">
+              <i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>
+              <span class="text-break">{{ user.username }}</span>
+            </span>
+          }
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            (click)="toggleTheme()"
+            [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+            [title]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            @if (theme() === 'dark') {
+              <i class="fa-solid fa-sun" aria-hidden="true"></i>
+              <span class="ms-2 d-md-none">Light mode</span>
+            } @else {
+              <i class="fa-solid fa-moon" aria-hidden="true"></i>
+              <span class="ms-2 d-md-none">Dark mode</span>
+            }
+          </button>
+
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket me-1" aria-hidden="true"></i>
+            Logout
+          </button>
+        </div>
+      } @else {
+        <div class="d-grid gap-2 d-md-flex align-items-md-center ms-md-auto pt-2 pt-md-0 pb-2 pb-md-0">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            (click)="toggleTheme()"
+            [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+            [title]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            @if (theme() === 'dark') {
+              <i class="fa-solid fa-sun" aria-hidden="true"></i>
+              <span class="ms-2 d-md-none">Light mode</span>
+            } @else {
+              <i class="fa-solid fa-moon" aria-hidden="true"></i>
+              <span class="ms-2 d-md-none">Dark mode</span>
+            }
+          </button>
+
+          <a
+            class="btn btn-outline-secondary btn-sm"
+            routerLink="/login"
+            routerLinkActive="active"
+            (click)="onNavLinkClick()"
+          >
+            <i class="fa-solid fa-right-to-bracket me-1" aria-hidden="true"></i>
+            Login
+          </a>
+
+          <a
+            class="btn btn-primary btn-sm"
+            routerLink="/register"
+            (click)="onNavLinkClick()"
+          >
+            <i class="fa-solid fa-user-plus me-1" aria-hidden="true"></i>
+            Register
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</nav>

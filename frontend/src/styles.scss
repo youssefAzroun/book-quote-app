@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+/* Minimal global styles — prefer Bootstrap utility classes in templates */
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}

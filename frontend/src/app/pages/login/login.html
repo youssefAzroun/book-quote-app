@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+      <div class="card shadow-sm border">
+        <div class="card-body p-3 p-sm-4 p-md-5">
+          <div class="text-center mb-4">
+            <div class="display-6 text-primary mb-2" aria-hidden="true">
+              <i class="fa-solid fa-right-to-bracket"></i>
+            </div>
+            <h1 class="h3 mb-2">Login</h1>
+            <p class="text-body-secondary mb-0 px-1">Sign in to manage books and your quotes.</p>
+          </div>
+
+          @if (serverError()) {
+            <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+              <i class="fa-solid fa-circle-exclamation mt-1 flex-shrink-0" aria-hidden="true"></i>
+              <div class="text-break">{{ serverError() }}</div>
+            </div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <div class="mb-3">
+              <label class="form-label fw-medium" for="login-username">Username</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-user" aria-hidden="true"></i>
+                </span>
+                <input
+                  id="login-username"
+                  type="text"
+                  class="form-control"
+                  formControlName="username"
+                  autocomplete="username"
+                  [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
+                />
+              </div>
+              @if (form.controls.username.touched && form.controls.username.hasError('required')) {
+                <div class="invalid-feedback d-block">Username is required.</div>
+              } @else if (form.controls.username.touched && form.controls.username.hasError('minlength')) {
+                <div class="invalid-feedback d-block">Username must be at least 3 characters.</div>
+              }
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-medium" for="login-password">Password</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text">
+                  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                </span>
+                <input
+                  id="login-password"
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  autocomplete="current-password"
+                  [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
+                />
+              </div>
+              @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+                <div class="invalid-feedback d-block">Password is required.</div>
+              } @else if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+                <div class="invalid-feedback d-block">Password must be at least 8 characters.</div>
+              }
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="isSubmitting()">
+              @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Signing in...
+              } @else {
+                <i class="fa-solid fa-right-to-bracket me-2" aria-hidden="true"></i>
+                Login
+              }
+            </button>
+          </form>
+
+          <hr class="my-4" />
+
+          <p class="mb-0 text-center text-body-secondary">
+            No account?
+            <a routerLink="/register" class="fw-medium link-primary text-decoration-none">Register</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

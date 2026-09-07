@@ -5,7 +5,20 @@ frontend/.angular/
 frontend/tmp/
 frontend/out-tsc/
 frontend/coverage/
+frontend/.env
+frontend/.env.*
 
 # Backend
 backend/**/bin/
 backend/**/obj/
+backend/**/*.db
+backend/**/*.db-shm
+backend/**/*.db-wal
+backend/**/secrets.json
+backend/**/appsettings.*.local.json
+
+# Secrets / local env
+.env
+.env.*
+*.user
+*.pfx
