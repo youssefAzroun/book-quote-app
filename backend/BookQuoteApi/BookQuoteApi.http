@@ -24,3 +24,79 @@ Content-Type: application/json
 }
 
 ###
+
+@token = paste-jwt-here
+
+GET {{BookQuoteApi_HostAddress}}/api/books
+Authorization: Bearer {{token}}
+
+###
+
+GET {{BookQuoteApi_HostAddress}}/api/books/1
+Authorization: Bearer {{token}}
+
+###
+
+POST {{BookQuoteApi_HostAddress}}/api/books
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "The Hobbit",
+  "author": "J. R. R. Tolkien",
+  "publicationDate": "1937-09-21"
+}
+
+###
+
+PUT {{BookQuoteApi_HostAddress}}/api/books/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "The Hobbit (Revised)",
+  "author": "J. R. R. Tolkien",
+  "publicationDate": "1937-09-21"
+}
+
+###
+
+DELETE {{BookQuoteApi_HostAddress}}/api/books/1
+Authorization: Bearer {{token}}
+
+###
+
+GET {{BookQuoteApi_HostAddress}}/api/quotes
+Authorization: Bearer {{token}}
+
+###
+
+GET {{BookQuoteApi_HostAddress}}/api/quotes/1
+Authorization: Bearer {{token}}
+
+###
+
+POST {{BookQuoteApi_HostAddress}}/api/quotes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "Not all those who wander are lost."
+}
+
+###
+
+PUT {{BookQuoteApi_HostAddress}}/api/quotes/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "Not all those who wander are lost. — Tolkien"
+}
+
+###
+
+DELETE {{BookQuoteApi_HostAddress}}/api/quotes/1
+Authorization: Bearer {{token}}
+
+###
