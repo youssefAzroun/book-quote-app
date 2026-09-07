@@ -1,0 +1,145 @@
+<div class="container-lg">
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-3 mb-4">
+    <div class="min-w-0">
+      <h1 class="h3 mb-1 fw-semibold text-break">
+        <i class="fa-solid fa-quote-left me-2 text-primary" aria-hidden="true"></i>
+        Mina citat
+      </h1>
+      <p class="text-body-secondary mb-0">Your private quotes — only you can see and manage them.</p>
+    </div>
+
+    @if (!showForm()) {
+      <div class="d-grid d-sm-block">
+        <button type="button" class="btn btn-primary" (click)="startCreate()">
+          <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>
+          New quote
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+      <i class="fa-solid fa-circle-exclamation mt-1 flex-shrink-0" aria-hidden="true"></i>
+      <div class="text-break">{{ errorMessage() }}</div>
+    </div>
+  }
+
+  @if (showForm()) {
+    <div class="card border shadow-sm mb-4">
+      <div class="card-body p-3 p-sm-4">
+        <h2 class="h5 mb-3 fw-semibold">
+          @if (editingQuoteId() === null) {
+            <i class="fa-solid fa-plus me-2 text-primary" aria-hidden="true"></i>
+            Add quote
+          } @else {
+            <i class="fa-solid fa-pen-to-square me-2 text-primary" aria-hidden="true"></i>
+            Edit quote
+          }
+        </h2>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-medium" for="quote-text">Text</label>
+            <textarea
+              id="quote-text"
+              class="form-control"
+              rows="4"
+              formControlName="text"
+              placeholder="Write your quote..."
+              [class.is-invalid]="form.controls.text.touched && form.controls.text.invalid"
+            ></textarea>
+            @if (form.controls.text.touched && form.controls.text.hasError('required')) {
+              <div class="invalid-feedback">Quote text is required.</div>
+            } @else if (form.controls.text.touched && form.controls.text.hasError('maxlength')) {
+              <div class="invalid-feedback">Quote text must be at most 2000 characters.</div>
+            }
+            <div class="form-text">Maximum 2000 characters.</div>
+          </div>
+
+          <div class="d-grid gap-2 d-sm-flex">
+            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+              @if (isSubmitting()) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Saving...
+              } @else {
+                <i class="fa-solid fa-floppy-disk me-2" aria-hidden="true"></i>
+                {{ editingQuoteId() === null ? 'Create quote' : 'Save changes' }}
+              }
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="cancelForm()"
+              [disabled]="isSubmitting()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="card border shadow-sm">
+      <div class="card-body text-center py-5 px-3">
+        <div class="spinner-border text-primary mb-3" role="status" aria-label="Loading quotes"></div>
+        <p class="text-body-secondary mb-0">Loading your quotes...</p>
+      </div>
+    </div>
+  } @else if (quotes().length === 0 && !showForm()) {
+    <div class="card border shadow-sm">
+      <div class="card-body text-center py-5 px-3">
+        <i class="fa-solid fa-quote-right fa-2x text-body-secondary mb-3" aria-hidden="true"></i>
+        <h2 class="h5 mb-2">No quotes yet</h2>
+        <p class="text-body-secondary mb-4">Save your first quote to start your collection.</p>
+        <button type="button" class="btn btn-outline-primary" (click)="startCreate()">
+          <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>
+          New quote
+        </button>
+      </div>
+    </div>
+  } @else if (quotes().length > 0) {
+    <div class="row g-3">
+      @for (quote of quotes(); track quote.id) {
+        <div class="col-12 col-md-6 min-w-0">
+          <article class="card border shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+              <blockquote class="mb-3 flex-grow-1 fs-6 lh-base mb-0">
+                <i class="fa-solid fa-quote-left text-body-secondary me-2" aria-hidden="true"></i>
+                <span class="text-break">{{ quote.text }}</span>
+              </blockquote>
+
+              <div class="d-grid gap-2 mt-3">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="startEdit(quote)"
+                  [disabled]="isDeletingId() === quote.id"
+                >
+                  <i class="fa-solid fa-pen-to-square me-1" aria-hidden="true"></i>
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteQuote(quote)"
+                  [disabled]="isDeletingId() === quote.id"
+                >
+                  @if (isDeletingId() === quote.id) {
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Deleting...
+                  } @else {
+                    <i class="fa-solid fa-trash me-1" aria-hidden="true"></i>
+                    Delete
+                  }
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</div>

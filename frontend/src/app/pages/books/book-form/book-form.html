@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8 col-xl-7">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-3 mb-4">
+        <div class="min-w-0">
+          <h1 class="h3 mb-1 fw-semibold text-break">
+            @if (isEditMode) {
+              <i class="fa-solid fa-pen-to-square me-2 text-primary" aria-hidden="true"></i>
+              Edit book
+            } @else {
+              <i class="fa-solid fa-plus me-2 text-primary" aria-hidden="true"></i>
+              Add new book
+            }
+          </h1>
+          <p class="text-body-secondary mb-0">
+            {{ isEditMode ? 'Update the book details below.' : 'Fill in the details for the new book.' }}
+          </p>
+        </div>
+        <div class="d-grid d-sm-block">
+          <a routerLink="/books" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>
+            Back
+          </a>
+        </div>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+          <i class="fa-solid fa-circle-exclamation mt-1 flex-shrink-0" aria-hidden="true"></i>
+          <div class="text-break">{{ errorMessage() }}</div>
+        </div>
+      }
+
+      @if (isLoading()) {
+        <div class="card border shadow-sm">
+          <div class="card-body text-center py-5 px-3">
+            <div class="spinner-border text-primary mb-3" role="status" aria-label="Loading book"></div>
+            <p class="text-body-secondary mb-0">Loading book...</p>
+          </div>
+        </div>
+      } @else {
+        <div class="card border shadow-sm">
+          <div class="card-body p-3 p-sm-4">
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <div class="mb-3">
+                <label class="form-label fw-medium" for="book-title">Title</label>
+                <input
+                  id="book-title"
+                  type="text"
+                  class="form-control"
+                  formControlName="title"
+                  placeholder="e.g. The Hobbit"
+                  [class.is-invalid]="form.controls.title.touched && form.controls.title.invalid"
+                />
+                @if (form.controls.title.touched && form.controls.title.hasError('required')) {
+                  <div class="invalid-feedback">Title is required.</div>
+                } @else if (form.controls.title.touched && form.controls.title.hasError('maxlength')) {
+                  <div class="invalid-feedback">Title must be at most 200 characters.</div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-medium" for="book-author">Author</label>
+                <input
+                  id="book-author"
+                  type="text"
+                  class="form-control"
+                  formControlName="author"
+                  placeholder="e.g. J. R. R. Tolkien"
+                  [class.is-invalid]="form.controls.author.touched && form.controls.author.invalid"
+                />
+                @if (form.controls.author.touched && form.controls.author.hasError('required')) {
+                  <div class="invalid-feedback">Author is required.</div>
+                } @else if (form.controls.author.touched && form.controls.author.hasError('maxlength')) {
+                  <div class="invalid-feedback">Author must be at most 200 characters.</div>
+                }
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-medium" for="book-publication-date">Publication date</label>
+                <input
+                  id="book-publication-date"
+                  type="date"
+                  class="form-control"
+                  formControlName="publicationDate"
+                  [class.is-invalid]="form.controls.publicationDate.touched && form.controls.publicationDate.invalid"
+                />
+                @if (form.controls.publicationDate.touched && form.controls.publicationDate.hasError('required')) {
+                  <div class="invalid-feedback">Publication date is required.</div>
+                }
+              </div>
+
+              <div class="d-grid gap-2 d-sm-flex">
+                <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+                  @if (isSubmitting()) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Saving...
+                  } @else {
+                    <i class="fa-solid fa-floppy-disk me-2" aria-hidden="true"></i>
+                    {{ isEditMode ? 'Save changes' : 'Create book' }}
+                  }
+                </button>
+                <a routerLink="/books" class="btn btn-outline-secondary">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

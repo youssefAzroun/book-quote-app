@@ -57,9 +57,15 @@ public class QuotesController(AppDbContext dbContext) : ControllerBase
             return Unauthorized(new { message = "User identity was not found in the token." });
         }
 
+        var text = request.Text.Trim();
+        if (text.Length == 0)
+        {
+            return BadRequest(new { message = "Quote text is required." });
+        }
+
         var quote = new Quote
         {
-            Text = request.Text.Trim(),
+            Text = text,
             UserId = userId.Value
         };
 
@@ -85,7 +91,13 @@ public class QuotesController(AppDbContext dbContext) : ControllerBase
             return NotFound(new { message = $"Quote with id {id} was not found." });
         }
 
-        quote.Text = request.Text.Trim();
+        var text = request.Text.Trim();
+        if (text.Length == 0)
+        {
+            return BadRequest(new { message = "Quote text is required." });
+        }
+
+        quote.Text = text;
         await dbContext.SaveChangesAsync();
 
         return Ok(ToResponse(quote));

@@ -37,10 +37,18 @@ public class BooksController(AppDbContext dbContext) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BookResponse>> CreateBook([FromBody] CreateBookRequest request)
     {
+        var title = request.Title.Trim();
+        var author = request.Author.Trim();
+
+        if (title.Length == 0 || author.Length == 0)
+        {
+            return BadRequest(new { message = "Title and author are required." });
+        }
+
         var book = new Book
         {
-            Title = request.Title.Trim(),
-            Author = request.Author.Trim(),
+            Title = title,
+            Author = author,
             PublicationDate = request.PublicationDate!.Value
         };
 
@@ -60,8 +68,16 @@ public class BooksController(AppDbContext dbContext) : ControllerBase
             return NotFound(new { message = $"Book with id {id} was not found." });
         }
 
-        book.Title = request.Title.Trim();
-        book.Author = request.Author.Trim();
+        var title = request.Title.Trim();
+        var author = request.Author.Trim();
+
+        if (title.Length == 0 || author.Length == 0)
+        {
+            return BadRequest(new { message = "Title and author are required." });
+        }
+
+        book.Title = title;
+        book.Author = author;
         book.PublicationDate = request.PublicationDate!.Value;
 
         await dbContext.SaveChangesAsync();

@@ -1,0 +1,134 @@
+<div class="container-lg">
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-3 mb-4">
+    <div class="min-w-0">
+      <h1 class="h3 mb-1 fw-semibold text-break">
+        <i class="fa-solid fa-book me-2 text-primary" aria-hidden="true"></i>
+        Books
+      </h1>
+      <p class="text-body-secondary mb-0">Browse and manage the shared book catalog.</p>
+    </div>
+
+    <div class="d-grid d-sm-block">
+      <a routerLink="/books/new" class="btn btn-primary">
+        <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>
+        Add new book
+      </a>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+      <i class="fa-solid fa-circle-exclamation mt-1 flex-shrink-0" aria-hidden="true"></i>
+      <div class="text-break">{{ errorMessage() }}</div>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="card border shadow-sm">
+      <div class="card-body text-center py-5 px-3">
+        <div class="spinner-border text-primary mb-3" role="status" aria-label="Loading books"></div>
+        <p class="text-body-secondary mb-0">Loading books...</p>
+      </div>
+    </div>
+  } @else if (books().length === 0) {
+    <div class="card border shadow-sm">
+      <div class="card-body text-center py-5 px-3">
+        <i class="fa-solid fa-book-open fa-2x text-body-secondary mb-3" aria-hidden="true"></i>
+        <h2 class="h5 mb-2">No books yet</h2>
+        <p class="text-body-secondary mb-4">Add the first book to get started.</p>
+        <a routerLink="/books/new" class="btn btn-outline-primary">
+          <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>
+          Add new book
+        </a>
+      </div>
+    </div>
+  } @else {
+    <div class="d-none d-md-block card border shadow-sm overflow-hidden">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-3">Title</th>
+              <th scope="col">Author</th>
+              <th scope="col" class="text-nowrap">Publication date</th>
+              <th scope="col" class="text-end pe-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (book of books(); track book.id) {
+              <tr>
+                <td class="ps-3 fw-medium text-break">{{ book.title }}</td>
+                <td class="text-break">{{ book.author }}</td>
+                <td class="text-body-secondary text-nowrap">{{ book.publicationDate | date: 'mediumDate' }}</td>
+                <td class="text-end text-nowrap pe-3">
+                  <div class="d-inline-flex gap-2">
+                    <a
+                      class="btn btn-sm btn-outline-primary"
+                      [routerLink]="['/books/edit', book.id]"
+                      [attr.aria-label]="'Edit ' + book.title"
+                    >
+                      <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                      <span class="d-none d-xl-inline ms-1">Edit</span>
+                    </a>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-danger"
+                      (click)="deleteBook(book)"
+                      [disabled]="isDeletingId() === book.id"
+                      [attr.aria-label]="'Delete ' + book.title"
+                    >
+                      @if (isDeletingId() === book.id) {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      } @else {
+                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        <span class="d-none d-xl-inline ms-1">Delete</span>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-md-none d-flex flex-column gap-3">
+      @for (book of books(); track book.id) {
+        <article class="card border shadow-sm">
+          <div class="card-body">
+            <h2 class="h5 mb-3 text-break">{{ book.title }}</h2>
+            <p class="mb-2 text-body-secondary small text-break">
+              <i class="fa-solid fa-user-pen me-2" aria-hidden="true"></i>
+              {{ book.author }}
+            </p>
+            <p class="mb-3 text-body-secondary small">
+              <i class="fa-solid fa-calendar-days me-2" aria-hidden="true"></i>
+              {{ book.publicationDate | date: 'mediumDate' }}
+            </p>
+            <div class="d-grid gap-2">
+              <a class="btn btn-outline-primary" [routerLink]="['/books/edit', book.id]">
+                <i class="fa-solid fa-pen-to-square me-1" aria-hidden="true"></i>
+                Edit
+              </a>
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                (click)="deleteBook(book)"
+                [disabled]="isDeletingId() === book.id"
+              >
+                @if (isDeletingId() === book.id) {
+                  <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                  Deleting...
+                } @else {
+                  <i class="fa-solid fa-trash me-1" aria-hidden="true"></i>
+                  Delete
+                }
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>
