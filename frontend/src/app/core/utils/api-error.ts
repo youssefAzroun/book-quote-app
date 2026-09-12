@@ -6,7 +6,7 @@ export function getApiErrorMessage(error: unknown, fallback: string): string {
   }
 
   if (error.status === 0) {
-    return 'Could not reach the API. Make sure the backend is running on http://localhost:5090.';
+    return 'Could not reach the API. Make sure the backend is running on https://book-quote-api-wq8l.onrender.com/.';
   }
 
   const fromBody = extractSafeMessage(error.error);

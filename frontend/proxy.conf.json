@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:5090",
+    "target": "https://book-quote-api-wq8l.onrender.com",
     "secure": false,
     "changeOrigin": true
   }
